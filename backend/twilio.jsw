@@ -1,0 +1,23 @@
+import twilio from 'twilio';
+import wixSecretsBackend from 'wix-secrets-backend';
+
+export async function sendTextMessage(toPhoneNumber){
+    const twilioAuthToken = await wixSecretsBackend.getSecret('twilioAuthToken');
+    const twilioAccountSID = await wixSecretsBackend.getSecret('twilioAccountSID');
+    const twilioPhoneNumber = await wixSecretsBackend.getSecret('twilioPhoneNumber');
+
+    const twilioClient = new twilio(twilioAccountSID, twilioAuthToken);
+
+    let birthdayMessage = await getBirthdayMessage();
+
+    twilioClient.messages.create({
+        "to": toPhoneNumber,
+        "from": twilioPhoneNumber,
+        "body": birthdayMessage
+        }
+    )
+}
+
+export function getBirthdayMessage(){
+    return "Happy birthday!";
+}

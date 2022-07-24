@@ -1,0 +1,29 @@
+import wixData from 'wix-data';
+import { sendTextMessage } from 'backend/twilio.jsw'
+
+$w.onReady(function () {	
+});
+
+export function submitButton_click(event) {
+	let email = $w('#userEmail').value;
+	let recipientFirstName = $w('#recipientFirstName').value;
+	let phoneNumber = $w('#recipientPhoneNumber').value;
+	let birthday = $w('#recipientBirthday').value;
+	let userFirstName = $w('#userFirstName').value;
+
+	let dataToStore = {
+		"userEmail": email,
+		"recipientFirstName": recipientFirstName,
+		"recipientPhoneNumber": phoneNumber,
+		"recipientBirthday": birthday,
+		"userFirstName": userFirstName
+	};
+
+	wixData.insert("responsiveGridSales01", dataToStore)
+		.then((result) => {
+			console.log(result);
+			$w('#userEmail, #recipientFirstName, #recipientPhoneNumber, #recipientBirthday, #userFirstName').value = "";
+		});
+
+	sendTextMessage(phoneNumber);
+}
